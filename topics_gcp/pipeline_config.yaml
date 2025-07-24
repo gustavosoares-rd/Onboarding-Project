@@ -1,0 +1,36 @@
+project_name: my_dataform_project
+default_schema: analytics
+bigquery_project: rd-isdpoctmp-stg-01
+schedule: 0 0 * * *
+tables:
+  - name: sales_summary
+    type: table
+    schema: analytics
+    query: sales_summary.sql
+    columns:
+      - name: sale_id
+        type: STRING
+        description: Unique identifier for the sale
+      - name: amount
+        type: FLOAT
+        description: Total amount of the sale
+      - name: sale_date
+        type: DATE
+        description: Date the sale was made
+
+  - name: regional_stats
+    type: table
+    schema: analytics
+    depends_on:
+      - sales_summary
+    query: regional_stats.sql
+    columns:
+      - name: region
+        type: STRING
+        description: Sales region
+      - name: total_sales
+        type: FLOAT
+        description: Total sales for the region
+      - name: report_date
+        type: DATE
+        description: Date of the report
